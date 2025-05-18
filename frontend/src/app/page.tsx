@@ -1,10 +1,9 @@
-import Image from "next/image";
+import ImageUploader from '@/components/ImageUploader'
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-black-100 text-3xl font-bold">
-      Tailwind is working in LumaFace 
+    <main className="min-h-screen flex items-center justify-center bg-gray-100">
+      <ImageUploader/>
     </main>
   )
 }
-
