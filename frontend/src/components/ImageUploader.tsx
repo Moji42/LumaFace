@@ -26,28 +26,37 @@ export default function ImageUploader() {
 
   // Handles submission of the selected image to the backend
   const handleSubmit = async () => {
-    if (!uploadedImage) return // Do nothing if no image is selected
-
+    if (!uploadedImage) return
+  
     setLoading(true)
     setResponse(null)
-
+  
     try {
-      // Create a FormData object and append the image file
       const formData = new FormData()
       formData.append('image', uploadedImage)
-
-      // Simulated API call — replace with real backend call later
-      console.log('Submitting image to backend...')
-      await new Promise((res) => setTimeout(res, 1000)) // Fake delay for demo
-
-      setResponse('Image submitted!')
-    } catch (err) {
+  
+      // Get backend URL from env file (for dev/prod flexibility)
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+  
+      const res = await fetch(`${API_URL}/api/rate/`, {
+        method: 'POST',
+        body: formData,
+      })
+  
+      if (!res.ok) {
+        throw new Error(`Server responded with ${res.status}`)
+      }
+  
+      const data = await res.json()
+      setResponse(`Your face score: ${data.score}`)
+    } catch (err: any) {
       console.error(err)
       setResponse('Error submitting image.')
     } finally {
       setLoading(false)
     }
   }
+  
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 p-8 bg-white shadow-xl rounded-2xl max-w-md mx-auto">
